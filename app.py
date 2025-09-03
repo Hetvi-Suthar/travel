@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 import difflib  
 con = pymysql.connect(
     host=os.getenv("DB_HOST"),
-    user=os.getenv("DB_USER"),
+    user=os.getenv("DB_USERNAME"),
     password=os.getenv("DB_PASSWORD"),
     database=os.getenv("DB_NAME"),
     port=int(os.getenv("DB_PORT", 3306)) 
