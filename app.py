@@ -9,7 +9,12 @@ from flask import jsonify
 from datetime import datetime, date, time
 from werkzeug.utils import secure_filename
 import difflib  
-con = pymysql.connect(host = "localhost", user = "root", password= "", database="project")
+con = pymysql.connect(
+    host=os.getenv("DB_HOST"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME")
+)
 cursor = con.cursor()
 app = Flask(__name__)
 app.secret_key = 'your-very-secret-key'  
