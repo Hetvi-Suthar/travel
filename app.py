@@ -749,38 +749,31 @@ def registration():
 
     return render_template('user/registration.html')
 
-
 @app.route('/user/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         email = request.form['uemail']
         password = request.form['upassword']
 
-        sql = "SELECT * FROM `user_reg` WHERE email = %s"
-        val = (email,)
-        cursor.execute(sql, val)
-        data = cursor.fetchone()
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM user_reg WHERE email = %s", (email,))
+        user = cursor.fetchone()
 
-        if data:
-            if check_password_hash(data[4], password):
-                if data[6] == 1:  # Blocked
-                    flash("Your account is blocked.", "danger")
-                    return render_template("user/login.html")
-
-                session['user_id'] = data[0]
-                session['user_name'] = data[1]
-                session['user_email'] = data[3]
+        if user:
+            # Columns order: id, name, contact_no, email, password_hash, address
+            if check_password_hash(user[4], password):
+                session['user_id'] = user[0]
+                session['user_name'] = user[1]
+                session['user_email'] = user[3]
                 flash("Login Successful!", "success")
-                return render_template("user/login.html", redirect_to=url_for('userdashboard'))
+                return redirect(url_for('userdashboard'))  # redirect to dashboard
             else:
-                flash("Invalid Credential","danger")
-                return render_template('user/login.html')
-
+                flash("Invalid Credentials", "danger")
         else:
-            flash("Email not registered.","danger")
-            return render_template('user/login.html')
+            flash("Email not registered.", "danger")
 
-    return render_template('user/login.html')            
+    return render_template('user/login.html')
+        
             
 @app.route('/logout')
 def logout():
