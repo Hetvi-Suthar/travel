@@ -760,20 +760,20 @@ def login():
         user = cursor.fetchone()
 
         if user:
-            # Columns order: id, name, contact_no, email, password_hash, address
-            if check_password_hash(user[4], password):
+            # password_hash is at index 3
+            if check_password_hash(user[3], password):
                 session['user_id'] = user[0]
                 session['user_name'] = user[1]
-                session['user_email'] = user[3]
+                session['user_email'] = user[2]  # email at index 2
                 flash("Login Successful!", "success")
-                return redirect(url_for('userdashboard'))  # redirect to dashboard
+                return redirect(url_for('userdashboard'))
             else:
                 flash("Invalid Credentials", "danger")
         else:
             flash("Email not registered.", "danger")
 
     return render_template('user/login.html')
-        
+
             
 @app.route('/logout')
 def logout():
