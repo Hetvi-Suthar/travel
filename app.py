@@ -9,13 +9,7 @@ from flask import jsonify
 from datetime import datetime, date, time
 from werkzeug.utils import secure_filename
 import difflib  
-con = pymysql.connect(
-    host=os.getenv("DB_HOST"),
-    user=os.getenv("DB_USERNAME"),
-    password=os.getenv("DB_PASSWORD"),
-    database=os.getenv("DB_NAME"),
-    port=int(os.getenv("DB_PORT", 3306)) 
-)
+con = pymysql.connect(host = "localhost", user = "root", password= "", database="project")
 cursor = con.cursor()
 app = Flask(__name__)
 app.secret_key = 'your-very-secret-key'  
@@ -751,7 +745,7 @@ def login():
         data = cursor.fetchone()
 
         if data:
-            if check_password_hash(data[5], password):
+            if check_password_hash(data[4], password):
                 if data[7] == 1:  # Blocked
                     flash("Your account is blocked.", "danger")
                     return render_template("user/login.html")
@@ -770,15 +764,6 @@ def login():
             return render_template('user/login.html')
 
     return render_template('user/login.html')            
-
-                # Profile completeness check
-'''incomplete_fields = [data[1], data[2], data[4], data[6], data[7], data[8], data[9], data[10]]
-                if any(field in [None, '', ' '] for field in incomplete_fields):
-                    flash("Please complete your profile first.", "info")
-                    return render_template("user/login.html", redirect_to=url_for('editprofile'))
-                else:
-                    flash("Login Successful!", "success")
-                    return render_template("user/login.html", redirect_to=url_for('userdashboard'))'''
             
 @app.route('/logout')
 def logout():
