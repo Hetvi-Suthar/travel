@@ -746,7 +746,7 @@ def login():
 
         if data:
             if check_password_hash(data[4], password):
-                if data[7] == 1:  # Blocked
+                if data[6] == 1:  # Blocked
                     flash("Your account is blocked.", "danger")
                     return render_template("user/login.html")
 
