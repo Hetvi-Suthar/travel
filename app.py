@@ -715,30 +715,40 @@ def packagedetails(id):
 def userbooking():
     return render_template('userbooking.html')
   
-@app.route('/user/registration',methods = ['POST','GET'])
+@app.route('/user/registration', methods=['POST','GET'])
 def registration():
     if request.method == 'POST':
-        name = request.form['uname']
-        email = request.form['uemail']
-        password = request.form['upassword']
-        phone = request.form['uphone']
-        address = request.form['address']
-        hashed_password = generate_password_hash(password)
-        cursor = con.cursor()
-        sql = "SELECT * FROM `user_reg` WHERE email = %s"
-        cursor.execute(sql,(email,))
-        existing_user = cursor.fetchone()
+        try:
+            name = request.form['uname']
+            email = request.form['uemail']
+            password = request.form['upassword']
+            phone = request.form['uphone']
+            address = request.form['address']
 
-        if existing_user:
-            flash("Email already exist! please try logging in or use a different email","warning")
-            return render_template('user/registration.html',redirect_to = url_for('registration'))
-        sql = "INSERT INTO `user_reg` (`name`,`contact_no`,`email`,`password_hash`,`address`) VALUES(%s,%s,%s,%s,%s)"
-        val = (name,phone,email,hashed_password,address)
-        cursor.execute(sql,val)
-        con.commit()
-        flash('Registration successful! Please login.','success')
-        return render_template("user/registration.html", redirect_to=url_for('login'))
-    return render_template("user/registration.html")
+            hashed_password = generate_password_hash(password)
+            cursor = con.cursor()
+
+            cursor.execute("SELECT * FROM user_reg WHERE email=%s", (email,))
+            if cursor.fetchone():
+                flash("Email already exists! Try logging in.", "warning")
+                return render_template('user/registration.html')
+
+            cursor.execute(
+                "INSERT INTO user_reg (name, contact_no, email, password_hash, address) VALUES (%s,%s,%s,%s,%s)",
+                (name, phone, email, hashed_password, address)
+            )
+            con.commit()
+            flash("Registration successful! Please login.", "success")
+            return redirect(url_for('login'))
+
+        except Exception as e:
+            con.rollback()
+            print("Live Registration Error:", e)  # Ye console/logs me dikhega
+            flash(f"Something went wrong: {e}", "danger")
+            return render_template('user/registration.html')
+
+    return render_template('user/registration.html')
+
 
 @app.route('/user/login', methods=['POST', 'GET'])
 def login():
