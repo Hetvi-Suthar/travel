@@ -743,7 +743,7 @@ def registration():
 
         except Exception as e:
             con.rollback()
-            print("Live Registration Error:", e)  # Ye console/logs me dikhega
+            print("Live Registration Error:", e)  
             flash(f"Something went wrong: {e}", "danger")
             return render_template('user/registration.html')
 
@@ -760,13 +760,13 @@ def login():
         user = cursor.fetchone()
 
         if user:
-            # password_hash is at index 3
             if check_password_hash(user[3], password):
                 session['user_id'] = user[0]
                 session['user_name'] = user[1]
-                session['user_email'] = user[2]  # email at index 2
+                session['user_email'] = user[2]
                 flash("Login Successful!", "success")
-                return redirect(url_for('userdashboard'))
+                
+                return render_template('user/login.html', redirect_to=url_for('userdashboard'))
             else:
                 flash("Invalid Credentials", "danger")
         else:
@@ -774,7 +774,6 @@ def login():
 
     return render_template('user/login.html')
 
-            
 @app.route('/logout')
 def logout():
     session.pop('user_id',None)
