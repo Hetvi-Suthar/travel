@@ -44,17 +44,18 @@
                                                 Inactive
                                             {% endif %}
                                         </td>
-                                        <td>
-                                            <a href="{{ url_for('userblock', id=i[0]) }}"
-                                               {% if i[6] == 0 %}
-                                                   class="btn btn-success">
-                                                   <span class="icons icon-user-follow"></span>
-                                               {% else %}
-                                                   class="btn btn-danger">
-                                                   <span class="icons icon-user-follow"></span>
-                                               {% endif %}
-                                            </a>
+                                       <td>
+                                        {% if i[6] == 0 %}
+                                        <a href="{{ url_for('userblock', id=i[0]) }}" class="btn btn-success">
+                                            <span class="icons icon-user-follow"></span>
+                                        </a>
+                                        {% else %}
+                                        <a href="{{ url_for('userblock', id=i[0]) }}" class="btn btn-danger">
+                                            <span class="icons icon-user-follow"></span>
+                                        </a>
+                                        {% endif %}
                                         </td>
+
                                     </tr>
                                     {% endfor %}
                                 </tbody>
