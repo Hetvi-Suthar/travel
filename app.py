@@ -542,7 +542,7 @@ def userblock(id):
     val = (id,)
     cursor.execute(sql,val)
     data = cursor.fetchone()
-    if data[7] == 0:
+    if data[6] == 0:
         sql = "UPDATE `user_reg` SET status = 1 WHERE user_id = %s"
     else:
         sql = "UPDATE `user_reg` SET status = 0 WHERE user_id = %s"  
