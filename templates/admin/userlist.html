@@ -36,9 +36,9 @@
                                         <td>{{ i[1] }}</td>
                                         <td>{{ i[2] }}</td>
                                         <td>{{ i[3] }}</td>
-                                        <td>{{ i[6] }}</td>
+                                        <td>{{ i[5] }}</td>
                                         <td>
-                                            {% if i[7] == 0 %}
+                                            {% if i[6] == 0 %}
                                                 Active
                                             {% else %}
                                                 Inactive
@@ -46,7 +46,7 @@
                                         </td>
                                         <td>
                                             <a href="{{ url_for('userblock', id=i[0]) }}"
-                                               {% if i[7] == 0 %}
+                                               {% if i[6] == 0 %}
                                                    class="btn btn-success">
                                                    <span class="icons icon-user-follow"></span>
                                                {% else %}
