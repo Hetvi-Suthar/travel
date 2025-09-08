@@ -128,7 +128,6 @@
 }
 </style>
 
-
 <section class="ftco-section bg-light">
   <div class="container">
     <div class="row justify-content-center mb-4">
@@ -204,8 +203,6 @@
             <div class="error-message" id="message-error" style="color: red; font-size: 16px; margin-top: 5px;" ></div>
           </div>
 
-
-
          <!-- Book Now Button for Stripe -->
         <div class="text-center">
           <button type="submit"  class="btn btn-primary">Book Now</button>
@@ -226,8 +223,6 @@
     </div>
   </div>
 </section>
-
-<!-- Removed Cashfree JS SDK and related code -->
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -265,164 +260,17 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-/*document.getElementById("checkoutform").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    // Clear all previous errors and borders first
-    const fullname = document.getElementById('fullname');
-    const email = document.getElementById('email');
-    const phone = document.getElementById('phone_no');
-    const mode = document.getElementById('mode');
-    const travel_date = document.getElementById('travel_date');
-    const no_of_members = document.getElementById('no_of_members');
-
-    // Clear errors
-    document.getElementById('name-error').textContent = '';
-    document.getElementById('email-error').textContent = '';
-    document.getElementById('phone-error').textContent = '';
-    document.getElementById('mode-error').textContent = '';
-    document.getElementById('date-error').textContent = '';
-    document.getElementById('travel-error').textContent = '';
-
-    // Clear borders
-    fullname.style.border = '';
-    email.style.border = '';
-    phone.style.border = '';
-    mode.style.border = '';
-    travel_date.style.border = '';
-    no_of_members.style.border = '';
-
-    // Check Full Name
-    if (fullname.value.trim() === '') {
-        document.getElementById('name-error').textContent = 'Full name is required';
-        fullname.style.border = '2px solid red';
-        fullname.focus();
-        return;
-    } else {
-        const namePattern = /^[A-Za-z\s]+$/;
-        if (!namePattern.test(fullname.value.trim())) {
-            document.getElementById('name-error').textContent = 'Full name can contain only letters and spaces';
-            fullname.style.border = '2px solid red';
-            fullname.focus();
-            return;
-        }
-    }
-
-    // Check Email
-    if (email.value.trim() === '') {
-        document.getElementById('email-error').textContent = 'Email is required';
-        email.style.border = '2px solid red';
-        email.focus();
-        return;
-    } else {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(email.value.trim())) {
-            document.getElementById('email-error').textContent = 'Enter a valid email address';
-            email.style.border = '2px solid red';
-            email.focus();
-            return;
-        }
-    }
-
-    // Check Phone Number
-if (phone.value.trim() === '') {
-    document.getElementById('phone-error').textContent = 'Phone number is required';
-    phone.style.border = '2px solid red';
-    phone.focus();
-    return;
-} else {
-    // Phone number pattern: starts with 6-9 and has total 10 digits
-    const phonePattern = /^[6-9]\d{9}$/;
-    if (!phonePattern.test(phone.value.trim())) {
-        document.getElementById('phone-error').textContent = 'Enter a valid 10-digit phone number';
-        phone.style.border = '2px solid red';
-        phone.focus();
-        return;
-    }
-}
-
-
-    // Check Mode of Transport
-    if (mode.value === '') {
-        document.getElementById('mode-error').textContent = 'Select a mode of transport';
-        mode.style.border = '2px solid red';
-        mode.focus();
-        return;
-    }
-
-    // Check Travel Date
-    if (travel_date.value === '') {
-        document.getElementById('date-error').textContent = 'Select a travel date';
-        travel_date.style.border = '2px solid red';
-        travel_date.focus();
-        return;
-    }
-
-    // Check Number of Travelers
-    if (no_of_members.value === '' || parseInt(no_of_members.value) < 1) {
-        document.getElementById('travel-error').textContent = 'Enter valid number of travelers';
-        no_of_members.style.border = '2px solid red';
-        no_of_members.focus();
-        return;
-    }
-
-    
-    const form = e.target;
-    const formData = new FormData(form);
-
-    const response = await fetch("/create_razorpay_order", {
-        method: "POST",
-        body: formData
-    });
-
-    const data = await response.json();
-
-    if (data.status === "success") {
-        const options = {
-            key: "rzp_test_0L2pyQqkJzupt2",  
-            amount: data.amount,
-            currency: "INR",
-            name: "TripNest",
-            description: "Order Payment",
-            order_id: data.order_id,
-            handler: function(response) {
-                const newFormData = new FormData();
-                formData.forEach((value, key) => {
-                    newFormData.append(key, value);
-                });
-
-                fetch("/confirm_order1", {
-                    method: "POST",
-                    body: newFormData
-                })
-                .then(res => res.json())
-                .then(res => {
-                    alert("Payment Successful!");
-                    window.location.href = "/";
-                });
-            }
-        };
-
-        const rzp = new Razorpay(options);
-        rzp.open();
-    } else {
-        alert("Error creating Razorpay order");
-    }
-});*/
-
 document.getElementById("checkoutform").addEventListener("submit", async function(e) {
     e.preventDefault();
 
-    // --- 1. Check if user is logged in ---
     const userLoggedIn = {{ 'true' if session.get('user_id') else 'false' }};
     if (!userLoggedIn) {
-        const nextUrl = window.location.href;  // Remember current page
+        const nextUrl = window.location.href; 
         alert("Please login first to book this package!");
         window.location.href = "{{ url_for('login') }}?next=" + encodeURIComponent(nextUrl);
         return;
     }
 
-    // --- 2. Form validation ---
     const fullname = document.getElementById('fullname');
     const email = document.getElementById('email');
     const phone = document.getElementById('phone_no');
@@ -430,13 +278,11 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
     const travel_date = document.getElementById('travel_date');
     const no_of_members = document.getElementById('no_of_members');
 
-    // Clear previous errors and borders
     ['name', 'email', 'phone', 'mode', 'date', 'travel'].forEach(id => {
         document.getElementById(id + '-error').textContent = '';
     });
     [fullname, email, phone, mode, travel_date, no_of_members].forEach(el => el.style.border = '');
 
-    // Full Name validation
     if (fullname.value.trim() === '') {
         document.getElementById('name-error').textContent = 'Full name is required';
         fullname.style.border = '2px solid red';
@@ -449,7 +295,6 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
         return;
     }
 
-    // Email validation
     if (email.value.trim() === '') {
         document.getElementById('email-error').textContent = 'Email is required';
         email.style.border = '2px solid red';
@@ -462,7 +307,6 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
         return;
     }
 
-    // Phone validation
     if (phone.value.trim() === '') {
         document.getElementById('phone-error').textContent = 'Phone number is required';
         phone.style.border = '2px solid red';
@@ -475,7 +319,6 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
         return;
     }
 
-    // Mode of transport validation
     if (mode.value === '') {
         document.getElementById('mode-error').textContent = 'Select a mode of transport';
         mode.style.border = '2px solid red';
@@ -483,7 +326,6 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
         return;
     }
 
-    // Travel date validation
     if (travel_date.value === '') {
         document.getElementById('date-error').textContent = 'Select a travel date';
         travel_date.style.border = '2px solid red';
@@ -491,7 +333,6 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
         return;
     }
 
-    // Number of travelers validation
     if (no_of_members.value === '' || parseInt(no_of_members.value) < 1) {
         document.getElementById('travel-error').textContent = 'Enter valid number of travelers';
         no_of_members.style.border = '2px solid red';
@@ -499,7 +340,6 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
         return;
     }
 
-    // --- 3. Razorpay Payment ---
     const form = e.target;
     const formData = new FormData(form);
 
@@ -509,7 +349,7 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
 
         if (data.status === "success") {
             const options = {
-                key: "rzp_test_0L2pyQqkJzupt2", // Replace with live key in production
+                key: "rzp_test_0L2pyQqkJzupt2", 
                 amount: data.amount,
                 currency: "INR",
                 name: "TripNest",
@@ -539,7 +379,5 @@ document.getElementById("checkoutform").addEventListener("submit", async functio
 });
 
 </script>
-
-
 
 {% endblock %}
