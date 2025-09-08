@@ -14,46 +14,38 @@
   <!-- Statistics Cards -->
   <div class="row mb-4">
     <!-- Total Users -->
-    <div class="col-md-3 col-sm-6 mb-3">
-      <div class="card shadow-sm text-center h-100">
-        <div class="card-body">
-          <h5 class="card-title">Total Users</h5>
-          <h2 class="card-text">{{ total_users }}</h2>
-          <p class="text-muted">User active</p>
-        </div>
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="card shadow-sm text-center h-100 p-3">
+        <h5 class="card-title">Total Users</h5>
+        <h2 class="card-text display-5">{{ total_users }}</h2>
+        <p class="text-muted">User active</p>
       </div>
     </div>
 
     <!-- Total Bookings -->
-    <div class="col-md-3 col-sm-6 mb-3">
-      <div class="card shadow-sm text-center h-100">
-        <div class="card-body">
-          <h5 class="card-title">Total Bookings</h5>
-          <h2 class="card-text">{{ total_bookings }}</h2>
-          <p class="text-muted">New Orders</p>
-        </div>
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="card shadow-sm text-center h-100 p-3">
+        <h5 class="card-title">Total Bookings</h5>
+        <h2 class="card-text display-5">{{ total_bookings }}</h2>
+        <p class="text-muted">New Orders</p>
       </div>
     </div>
 
     <!-- Active Packages -->
-    <div class="col-md-3 col-sm-6 mb-3">
-      <div class="card shadow-sm text-center h-100">
-        <div class="card-body">
-          <h5 class="card-title">Active Packages</h5>
-          <h2 class="card-text">{{ total_packages }}</h2>
-          <p class="text-muted">Packages Running</p>
-        </div>
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="card shadow-sm text-center h-100 p-3">
+        <h5 class="card-title">Active Packages</h5>
+        <h2 class="card-text display-5">{{ total_packages }}</h2>
+        <p class="text-muted">Packages Running</p>
       </div>
     </div>
 
     <!-- Total Revenue -->
-    <div class="col-md-3 col-sm-6 mb-3">
-      <div class="card shadow-sm text-center h-100">
-        <div class="card-body">
-          <h5 class="card-title">Total Revenue</h5>
-          <h2 class="card-text">₹3,21,000</h2>
-          <p class="text-muted">Revenue Earned</p>
-        </div>
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="card shadow-sm text-center h-100 p-3">
+        <h5 class="card-title">Total Revenue</h5>
+        <h2 class="card-text display-5">₹3,21,000</h2>
+        <p class="text-muted">Revenue Earned</p>
       </div>
     </div>
   </div>
@@ -66,78 +58,41 @@
   </div>
 
   <div class="row mb-4">
-    <!-- Bookings Verified -->
-    <div class="col-md-6 mb-3">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h6>Bookings Verified</h6>
-          <p><strong>{{ booking_verified }}</strong> bookings verified out of <strong>{{ total_bookings }}</strong></p>
-          <div class="progress">
-            <div class="progress-bar bg-success" role="progressbar" style="width: {{ booking_verified_percent }}%" aria-valuenow="{{ booking_verified_percent }}" aria-valuemin="0" aria-valuemax="100">{{ booking_verified_percent }}%</div>
-          </div>
+    <!-- Progress Cards -->
+    {% set reports = [
+      {'title':'Bookings Verified','value':booking_verified,'percent':booking_verified_percent,'color':'success'},
+      {'title':'Pending Bookings','value':pending_bookings,'percent':pending_percent,'color':'info'},
+      {'title':'Popular Package','value':popular_count,'percent':popular_percent,'color':'warning'},
+      {'title':'Blocked Users','value':blocked_users,'percent':blocked_percent,'color':'danger'}
+    ] %}
+    {% for report in reports %}
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="card shadow-sm h-100 p-3">
+        <h6>{{ report.title }}</h6>
+        <p><strong>{{ report.value }}</strong></p>
+        <div class="progress">
+          <div class="progress-bar bg-{{ report.color }}" role="progressbar" style="width: {{ report.percent }}%" aria-valuenow="{{ report.percent }}" aria-valuemin="0" aria-valuemax="100">{{ report.percent }}%</div>
         </div>
       </div>
     </div>
-
-    <!-- Pending Bookings -->
-    <div class="col-md-6 mb-3">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h6>Pending Bookings</h6>
-          <p><strong>{{ pending_bookings }}</strong> bookings are pending out of <strong>{{ total_bookings }}</strong></p>
-          <div class="progress">
-            <div class="progress-bar bg-info" role="progressbar" style="width: {{ pending_percent }}%" aria-valuenow="{{ pending_percent }}" aria-valuemin="0" aria-valuemax="100">{{ pending_percent }}%</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Popular Package -->
-    <div class="col-md-6 mb-3">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h6>Popular Package (This Month)</h6>
-          <p><strong>{{ popular_package }}</strong> – {{ popular_count }} bookings</p>
-          <div class="progress">
-            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ popular_percent }}%" aria-valuenow="{{ popular_percent }}" aria-valuemin="0" aria-valuemax="100">{{ popular_percent }}%</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Blocked Users -->
-    <div class="col-md-6 mb-3">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h6>Blocked/Inactive Users</h6>
-          <p><strong>{{ blocked_users }}</strong> blocked out of <strong>{{ total_users }}</strong> users</p>
-          <div class="progress">
-            <div class="progress-bar bg-danger" role="progressbar" style="width: {{ blocked_percent }}%" aria-valuenow="{{ blocked_percent }}" aria-valuemin="0" aria-valuemax="100">{{ blocked_percent }}%</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 
   <!-- Charts Section -->
   <div class="row">
     <!-- Monthly Bookings Chart -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h5>Monthly Bookings</h5>
-          <canvas class="line-chart" style="height: 300px;"></canvas>
-        </div>
+      <div class="card shadow-sm h-100 p-3">
+        <h5>Monthly Bookings</h5>
+        <canvas class="line-chart" style="height:300px;"></canvas>
       </div>
     </div>
 
     <!-- Top Destinations Chart -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-body text-center">
-          <h5>Top 5 Booked Destinations</h5>
-          <canvas id="topDestinationPieChart" style="height: 300px; width: 300px;"></canvas>
-        </div>
+      <div class="card shadow-sm h-100 p-3 text-center">
+        <h5>Top 5 Booked Destinations</h5>
+        <canvas id="topDestinationPieChart" style="height:300px;width:300px;"></canvas>
       </div>
     </div>
   </div>
@@ -157,13 +112,17 @@ new Chart(document.querySelector('.line-chart'), {
       data: {{ monthly_counts|tojson }},
       borderColor: '#3498db',
       backgroundColor: 'rgba(52,152,219,0.2)',
-      fill: true
+      fill: true,
+      tension: 0.3
     }]
   },
   options: {
     responsive: true,
     plugins: {
       legend: { display: true }
+    },
+    scales: {
+      y: { beginAtZero: true }
     }
   }
 });
