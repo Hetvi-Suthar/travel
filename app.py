@@ -583,21 +583,21 @@ def userdashboard():
 def search():
     search_term = request.form['search'].strip().lower()
     cursor = con.cursor()
+
     cursor.execute("""
-        SELECT p.*, s.name, s.location
+        SELECT p.*, s.name
         FROM tbl_package p
         JOIN subcategory s ON p.subcategory_id = s.subcategory_id
     """)
     all_packages = cursor.fetchall()
     matched_packages = []
-    for pkg in all_packages:
-        package_destination = pkg[2].lower()
-        subcat_name = pkg[-2].lower()
-        subcat_location = pkg[-1].lower()
 
-        combined_text = f"{package_destination} {subcat_name} {subcat_location}"
-        if difflib.get_close_matches(search_term, [package_destination, subcat_name, subcat_location], n=1, cutoff=0.6):
+    for pkg in all_packages:
+        subcat_name = pkg[-1].lower() 
+
+        if search_term in subcat_name:  
             matched_packages.append(pkg)
+
     return render_template('user/user_package.html', userpackage=matched_packages)
 
 @app.route('/suggest', methods=['GET'])
