@@ -584,21 +584,17 @@ def search():
     search_term = request.form['search'].strip().lower()
     cursor = con.cursor()
 
-    cursor.execute("""
-        SELECT p.*, s.name
-        FROM tbl_package p
-        JOIN subcategory s ON p.subcategory_id = s.subcategory_id
-    """)
-    all_packages = cursor.fetchall()
-    matched_packages = []
+    cursor.execute("SELECT name FROM subcategory")
+    all_subcategories = cursor.fetchall()
+    matched_subcategories = []
 
-    for pkg in all_packages:
-        subcat_name = pkg[-1].lower() 
+    for row in all_subcategories:
+        subcat_name = row[0].lower()
+        if search_term in subcat_name:
+            matched_subcategories.append(row[0])
 
-        if search_term in subcat_name:  
-            matched_packages.append(pkg)
+    return render_template('user/user_subcategory_search.html', subcategories=matched_subcategories)
 
-    return render_template('user/user_package.html', userpackage=matched_packages)
 
 @app.route('/suggest', methods=['GET'])
 def suggest():
